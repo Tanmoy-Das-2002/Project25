@@ -3,6 +3,10 @@ datasource db {
   url  	    = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 model Profile{ 
   id String @id @default(uuid())
   userId String @unique
@@ -22,7 +26,7 @@ model Server{
   id String @id @default(uuid())
   name String
   imageUrl String @db.Text
-  inviteCode String @db.Text
+  inviteCode String @unique
 
   profileId String
   profile Profile @relation(fields: [profileId], references:[id], onDelete:Cascade)
