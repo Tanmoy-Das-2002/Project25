@@ -12,7 +12,10 @@ interface ChannelIdPageProps {
     channelId: string;
   };
 }
+
 const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
+  const { serverId, channelId } = await params;
+
   const profile = await currentProfile();
 
   if (!profile) {
@@ -21,13 +24,13 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
 
   const channel = await db.channel.findUnique({
     where: {
-      id: params.channelId,
+      id: channelId,
     },
   });
 
   const member = await db.member.findFirst({
     where: {
-      serverId: params.serverId,
+      serverId,
       profileId: profile.id,
     },
   });
@@ -52,7 +55,7 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
         socketUrl="/api/socket/messages"
         socketQuery={{
           channelId: channel.id,
-          severId: channel.serverId,
+          serverId: channel.serverId,
         }}
         paramKey="channelId"
         paramValue={channel.id}
